@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "algorithm": "cpp",
+        "string": "cpp"
+    },
+    "editor.autoIndent": false,
+    "editor.detectIndentation": false
+}
