@@ -20,7 +20,8 @@
         "bitset": "cpp",
         "functional": "cpp",
         "tuple": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "queue": "cpp"
     },
     "editor.autoIndent": false,
     "editor.detectIndentation": false
