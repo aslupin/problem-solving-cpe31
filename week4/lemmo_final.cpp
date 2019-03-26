@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdio.h>
 #include <vector>
 #include <stack>
 #include <queue>
@@ -10,9 +11,7 @@ int main()
     int ans[2] = {0};
     int major_dir = 0;
     cin >> w >> h;
-    int dolla_count = w * (h - 1);
-    // int dolla_count = 0;
-    int max_ans = 0;
+    int dolla_count = w * (h - 1), max_ans = 0;
     // TR - (STACK)
     typedef pair<int, int> tuple;     // x,y in stack
     typedef pair<int, tuple> walking; // (direction ,(x,y))
@@ -28,20 +27,18 @@ int main()
     // typedef pair<bool, result> checkerAndResult;  // (checker, result)
     typedef pair<int, result> edgeStructure;
     // (typeStanding , (edge[m].nextfloor.result, (edge[m].left.result , edge[m].right.result)))
-    queue<tuple> new_way, worst_spot;
+    queue<tuple> new_way;
     // vector<int> ans(0);
     vector<edgeStructure> edge[2][h];
     stack<walking> deep;
     queue<walking> setter;
-    // int pos_dol_x = 0, pos_dol_y = 0;
     for (int i = 0; i < h; i++)
         for (int j = 0; j < w; j++)
         {
             // cin >> builder;
             scanf(" %c", &builder);
 
-            // new_way.push(make_pair(i, j));
-
+            new_way.push(make_pair(i, j));
             if (builder == '#') // -1
             {
                 edge[0][i].push_back(make_pair(-1, make_pair(make_pair(0, 0), make_pair(make_pair(0, 0), make_pair(0, 0)))));
@@ -60,11 +57,9 @@ int main()
             }
             else if (builder == '$') // 2
             {
-                // pos_dol_x = i;
-                // pos_dol_y = j;
 
-                edge[0][i].push_back(make_pair(2, make_pair(make_pair(0, 0), make_pair(make_pair(0, 1), make_pair(0, 1)))));
-                edge[1][i].push_back(make_pair(2, make_pair(make_pair(0, 0), make_pair(make_pair(0, 1), make_pair(0, 1)))));
+                edge[0][i].push_back(make_pair(2, make_pair(make_pair(0, 0), make_pair(make_pair(0, 0), make_pair(0, 0)))));
+                edge[1][i].push_back(make_pair(2, make_pair(make_pair(0, 0), make_pair(make_pair(0, 0), make_pair(0, 0)))));
                 // dolla_count++;
                 // if (i != 0)
                 // {
@@ -76,33 +71,27 @@ int main()
             // cout << i << " " << j << endl;
         }
     // dolla_count = 0;
-    // for (int ddd = 0; ddd < h - 1; ddd++)
-    // {
-    //     new_way.push(make_pair(ddd, pos_dol_y));
-    // }
-    // dolla_count = h - 1;
-    dolla_count = 1;
     for (int pm = 0; pm < dolla_count + 1; pm++)
     {
 
         // initial
         int m = 0;
-        if (pm > 1) // ZERO => NORMAL WALKING , ONE => FIND SPOT
+        if (pm != 0)
         {
+
             m = 1;
             ans[m] = 0;
             for (int ii = 0; ii < h; ii++)
                 for (int jj = 0; jj < w; jj++)
                 {
                     edge[1][ii][jj].first = edge[0][ii][jj].first;
-                    edge[1][ii][jj].second.first.second = 0;
-                    edge[1][ii][jj].second.second.first.second = 0;
-                    edge[1][ii][jj].second.second.second.second = 0;
                     edge[1][ii][jj].second.first.first = 0;
+                    edge[1][ii][jj].second.first.second = 0;
                     edge[1][ii][jj].second.second.first.first = 0;
+                    edge[1][ii][jj].second.second.first.second = 0;
                     edge[1][ii][jj].second.second.second.first = 0;
+                    edge[1][ii][jj].second.second.second.second = 0;
                 }
-
             edge[1][new_way.front().first][new_way.front().second].first = 0;
             edge[1][new_way.front().first][new_way.front().second].second.first.first = 0;
             edge[1][new_way.front().first][new_way.front().second].second.first.second = 0;
@@ -117,41 +106,26 @@ int main()
 
             new_way.pop();
 
+            // cout << endl;
+            // cout << endl;
+            // for (int ii = 0; ii < h; ii++)
+            // {
+            //     for (int jj = 0; jj < w; jj++)
+            //     {
+            //         cout << edge[1][ii][jj].first << " ";
+            //     }
+            //     cout << endl;
+            // }
+
             while (!deep.empty())
                 deep.pop();
             while (!setter.empty())
                 setter.pop();
         }
-        else if (pm == 1)
-        {
-            m = 0;
-            for (int ii = 0; ii < h; ii++)
-                for (int jj = 0; jj < w; jj++)
-                {
-                    edge[0][ii][jj].second.first.first = 0;
-                    edge[0][ii][jj].second.second.first.first = 0;
-                    edge[0][ii][jj].second.second.second.first = 0;
-                }
-        }
 
         for (int i = 0; i < w; i++)
-        {
             for (int f = 1; f <= 2; f++)
             {
-
-                if (pm == 1)
-                {
-                    while (worst_spot.front().first != 0 && worst_spot.front().second != 0)
-                        worst_spot.pop();
-
-                    if (worst_spot.front().first == 0)
-                        f = 1;
-                    else
-                        f = 2;
-                    i = worst_spot.front().second;
-                }
-
-                // INITIAL FIRST-TIME
                 major_dir = f;
                 if (edge[m][0][i].first == 0)
                 {
@@ -182,42 +156,6 @@ int main()
                     // cout << dir << "  (" << x << ", " << y << ")" << endl;
                     // cout << "result " << edge[m][x][y].second.second.first.second << " " << edge[m][x][y].second.second.second.second << endl;
                     deep.pop();
-
-                    if (pm == 1 && x != h - 1)
-                    {
-                        int tmp_x = x;
-                        int tmp_y = y;
-                        if (tmp_y != 0)
-                        {
-                            while (edge[m][tmp_x][tmp_y].second.second.first.second != 1)
-                            {
-                                tmp_y--;
-                            }
-                            if (edge[m][tmp_x][tmp_y].second.second.first.second == 1)
-                                new_way.push(make_pair(x, y));
-                        }
-                        if (tmp_y != w - 1)
-                        {
-                            while (edge[m][tmp_x][tmp_y].second.second.second.second != 1)
-                            {
-                                tmp_y++;
-                            }
-                            if (edge[m][tmp_x][tmp_y].second.second.second.second == 1)
-                                new_way.push(make_pair(x, y));
-                        }
-
-                        if (edge[m][x + 1][y].second.second.first.second == 1 && worst_spot.front().first == 0)
-                        {
-                            new_way.push(make_pair(x, y));
-                            // dolla_count++;
-                        }
-
-                        else if (edge[m][x + 1][y].second.second.second.second == 1 && worst_spot.front().second == 0)
-                        {
-                            new_way.push(make_pair(x, y));
-                            // dolla_count++;
-                        }
-                    }
 
                     if ((edge[m][x][y].second.first.first == 1 && dir == 0) ||
                         (edge[m][x][y].second.second.first.first == 1 && dir == 1) ||
@@ -302,8 +240,6 @@ int main()
                             // cout << " next " << endl;
                             deep.push(make_pair(major_dir, make_pair(x + 1, y)));
                             setter.push(make_pair(major_dir, make_pair(x + 1, y)));
-                            if (pm == 0)
-                                worst_spot.push(make_pair(x, y));
                         }
 
                         else if (edge[m][x][y].first == 1)
@@ -377,14 +313,9 @@ int main()
                         }
                     }
                 }
-                if (pm == 1)
-                    break;
             }
-            if (pm == 1)
-                break;
-        }
-
         // cout << endl;
+
         // for (int iii = 0; iii < h; iii++)
         // {
         //     for (int jjj = 0; jjj < w; jjj++)
@@ -393,29 +324,22 @@ int main()
         //     }
         //     cout << endl;
         // }
-        if (pm != 1)
+        for (int a = 0; a < w; a++)
         {
-            for (int a = 0; a < w; a++)
-            {
-                ans[m] += edge[m][0][a].second.second.first.second + edge[m][0][a].second.second.second.second;
-                // cout << edge[m][0][a].second.second.first.second << " " << edge[m][0][a].second.second.second.second << " , ";
-            }
 
-            // cout << ans[m] << endl;
-
-            if (m == 0)
-                max_ans = ans[m];
-            else
-            {
-                if (ans[m] > max_ans)
-                    max_ans = ans[m];
-            }
-            // cout << ans[m] << endl;
-            // cout << endl;
+            ans[m] += edge[m][0][a].second.second.first.second + edge[m][0][a].second.second.second.second;
+            // cout << edge[m][0][a].second.second.first.second << " " << edge[m][0][a].second.second.second.second << " , ";
         }
-
-        if (pm == 1)
-            dolla_count += new_way.size();
+        // cout << ans[m] << endl;
+        if (m == 0)
+            max_ans = ans[m];
+        else
+        {
+            if (ans[m] > max_ans)
+                max_ans = ans[m];
+        }
+        // cout << ans[m] << endl;
+        // cout << endl;
     }
     cout << ans[0] << " " << max_ans;
 }

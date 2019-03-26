@@ -18,11 +18,9 @@ int main()
         }
         else if (command == 'D')
         {
-            // cout << 's' << ll.size() << 'o' << operand << endl;
+
             if (!ll.empty() && operand <= ll.size())
             {
-                // cout << operand << endl;
-
                 list<int>::iterator it = ll.begin();
                 advance(it, operand - 1);
                 ll.erase(it);
