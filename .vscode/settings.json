@@ -87,7 +87,5 @@
         "cuchar": "cpp",
         "optional": "cpp"
     },
-    "editor.autoIndent": false,
-    "editor.detectIndentation": false,
     "C_Cpp.errorSquiggles": "Disabled"
 }
