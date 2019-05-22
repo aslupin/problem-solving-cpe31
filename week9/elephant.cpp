@@ -5,26 +5,24 @@ int main()
 {
     int n, val;
     cin >> n;
-
     int banana[n];
     int oldbest = 0;
     int ans = 0;
     for (int i = 0; i < 3; i++)
+    {
+        cin >> val;
         banana[i] = 0;
+    }
 
     for (int i = 3; i < n; i++)
     {
         cin >> val;
-
-        if (i == 3)
-            banana[i] = val;
-        else
-        {
-            oldbest = max(max(max(oldbest, banana[i - 3]), banana[i - 2]), banana[i - 1]);
-            banana[i] = val + oldbest;
-        }
-
-        ans = max(banana[i], ans);
+        oldbest = max(oldbest, banana[i - 3]);
+        banana[i] = val + oldbest;
     }
+
+    for (int i = 0; i < n; i++)
+        ans = max(ans, banana[i]);
+
     cout << ans;
 }
