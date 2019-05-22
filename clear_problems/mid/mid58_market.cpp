@@ -111,6 +111,7 @@ int main()
                 else break;  
             }   
         }   
+        printf("%d ", sum);    
     }
-       printf("%d", sum);    
+       printf("\nans : %d", sum);    
 }
